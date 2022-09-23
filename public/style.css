@@ -1,0 +1,21 @@
+
+
+ul li a{color: black; font-weight: bold; text-decoration: none; padding-top: 20px; display: block;}
+ul li a:hover{color: black;  text-decoration: none; }
+
+a{color: black; font-weight: bold; text-decoration: none;  display: block;}
+ a:hover{color: black;  text-decoration: none; }
+.sidebar ul{list-style-type: none;}
+ul{list-style-type: none;}
+
+ .model{position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0, 0, 0, .5);}
+ .m-content{background: #fff; position: absolute; padding: 10px; border-radius: 5px;top: 50%;left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.links li a{ font-weight: lighter; padding-left: 20px; padding-right: 20px;   color: grey;}
+.links li {  padding-left: 11px; padding-right: 11px; }
+.tabil th, td{font-size: 13px; text-align: center;}
+.rounds{max-width: 60%; border-radius: 10px;}
+.border td{}
+ .borders:hover{background: #3a3838;}
