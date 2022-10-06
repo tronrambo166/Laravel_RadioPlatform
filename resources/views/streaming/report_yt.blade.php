@@ -4,7 +4,10 @@
 
 
 <div class=" mx-auto" style="width:95%; background:#161616;" >  
-   <h4 class="text-center mt-2 text-light">Youtube Report</h4> <hr>
+   <h4 class="text-center mt-2 text-light w-75">Youtube Report <a href="{{route('youtube')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back</a>
+   </h4> <hr>
+   
+
          <div class="row"> 
             
 

@@ -8,6 +8,7 @@
              <h4 class="text-center mt-2 text-light">Rewind Cloud Monitoring</h4> <hr> 
 {{--<a href="{{route('reportAPP')}}" class="rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Graph</a>--}}
  <a class="text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1" href="https://artists.apple.com/a" target="popup" onclick="window.open('https://artists.apple.com/a','popup','width=600','height=600')">Go to Stats</a>
+<a href="{{route('update_id', ['type' => 'Apple Artist'] )}}" class="float-right text-warning rounded-0  px-4 btn btn-outline-dark font-weight-bold my-1">Update Id</a>
 
 <a href="{{route('streaming')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back To Streaming</a>
 

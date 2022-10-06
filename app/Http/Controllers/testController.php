@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\liveSongs;
 use App\Models\mymusic;
 use App\Models\albums;
+use App\Models\streaming;
 use Hash;
 use PDF;
 use Mail;
@@ -320,7 +321,12 @@ if(isset($songs['metadata']['music'][0]['artists'][0]['name'])) $titles['artist'
 }
 
 public function streaming() { 
-  return view('streaming');
+   $art=User::where('email', Session::get('logged'))->first();$art_id=$art->id;
+   $stream = streaming::where('user_id',$art_id)->first();
+   if($stream->apple_id == null || $stream->deezer_id == null || $stream->youtube_id == null || $stream->spotify_id == null || $stream->boomplay_id == null || $stream->mdundo_id == null)
+     $complete = 0;
+     else $complete = 1;
+     return view('streaming',compact('complete'));
  }
 
  public function realSocial() { 

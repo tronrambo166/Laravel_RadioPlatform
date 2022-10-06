@@ -6,7 +6,10 @@
 <div class="row mx-auto" style="width:90%; background:#161616;" >   
          <div class="col-md-12"> 
              <h4 class="text-center mt-2 text-light">Rewind Cloud Monitoring</h4> <hr> 
-<a href="{{route('reportSP')}}" class="rounded-0 px-4 btn btn-outline-light font-weight-bold my-1">Graph</a>
+<!-- <a href="{{route('reportSP')}}" class="rounded-0 px-4 btn btn-outline-light font-weight-bold my-1">Graph</a> -->
+
+<a href="{{route('update_id', ['type' => 'Spotify Artist'] )}}" class=" text-warning rounded-0  px-4 btn btn-outline-dark font-weight-bold my-1">Update Id</a>
+
 <a href="{{route('streaming')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back To Streaming</a>
 
  <table class="shadow mb-3 w-100 bg-white table tabil">
@@ -76,7 +79,7 @@
     Monthly Listeners = {{$listeners}}
     @endif
 
-     <a class="btn btn-outline-success ml-4" href="https://accounts.spotify.com/en/login" target="popup" onclick="window.open('https://open.spotify.com/user/31atwg367suskoge6efthhch67j4','popup','width=600','height=600')">Go to Stats</a>
+    
   </div>
 
 

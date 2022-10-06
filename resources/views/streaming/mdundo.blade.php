@@ -10,6 +10,8 @@
 
 <a class="text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1" href="https://mdundo.com/in/login/" target="popup" onclick="window.open('https://mdundo.com/in/login','popup','width=600','height=600')">Go to Stats</a>
 
+<a href="{{route('update_id', ['type' => 'Mdundo Artist'] )}}" class="float-right text-warning rounded-0  px-4 btn btn-outline-dark font-weight-bold my-1">Update Id</a>
+
 <a href="{{route('streaming')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back To Streaming</a>
 
  <table class="shadow mb-3 w-100 bg-white table tabil">

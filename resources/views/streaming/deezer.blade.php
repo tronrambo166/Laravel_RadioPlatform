@@ -6,7 +6,9 @@
 <div class="row mx-auto" style="width:90%; background:#161616;" >  
          <div class="col-md-12"> 
              <h4 class="text-center mt-2 text-light">Rewind Cloud Monitoring</h4> <hr> 
-<a href="{{route('reportDZZ')}}" class="rounded-0 px-4 btn btn-outline-light font-weight-bold my-1">Graph</a>
+<!-- <a href="{{route('reportDZZ')}}" class="rounded-0 px-4 btn btn-outline-light font-weight-bold my-1">Graph</a> -->
+<a href="{{route('update_id', ['type' => 'Deezer Artist'] )}}" class=" text-warning rounded-0  px-4 btn btn-outline-dark font-weight-bold my-1">Update Id</a>
+
 <a href="{{route('streaming')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back To Streaming</a>
  <table class="shadow mb-3 w-100 bg-white table tabil">
   <thead>

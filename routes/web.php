@@ -15,7 +15,7 @@ use App\Http\Controllers\homeController;
 */
 
 
-Route::group(['middleware'=>['checkAuth']], function(){ 
+Route::group(['middleware'=>['checkAuth']], function(){
 
 //Route::get('getSongs', 'testController@getSongs');
 Route::get('home', 'testController@home')->name('home');
@@ -83,15 +83,22 @@ Route::get('artist_signup/{remail}', function ($remail)
 
 
 //Streaming
+Route::get('update_id{type}', 'streamController@update_id')->name('update_id');
+Route::post('insert_id', 'streamController@insert_id')->name('insert_id');
 
 //Deezer
-
 Route::get('youtube', 'streamController@youtube')->name('youtube');
 Route::get('spotify', 'streamController@spotify')->name('spotify');
 Route::get('apple', 'streamController@apple')->name('apple');
 Route::get('boomplay', 'streamController@boomplay')->name('boomplay');
 Route::get('mdundo', 'streamController@mdundo')->name('mdundo');
 Route::get('deezer', 'streamController@getDeezer')->name('deezer');
+
+Route::get('overall10', function(){return view('streaming.overall10');})->name('overall10');
+Route::get('AjaxOverall10', 'streamController@overall10');
+Route::get('region10', function(){return view('streaming.region10');})->name('region10');
+Route::get('AjaxRegion10', 'streamController@region10');
+
 
 //REPORT
 Route::get('reportYT', 'graphController@reportYT')->name('reportYT');
