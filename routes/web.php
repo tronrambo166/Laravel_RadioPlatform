@@ -17,12 +17,13 @@ use App\Http\Controllers\homeController;
 
 Route::group(['middleware'=>['checkAuth']], function(){
 
-//Route::get('getSongs', 'testController@getSongs');
+//Inside
 Route::get('home', 'testController@home')->name('home');
 //Route::get('/', 'testController@home');
 Route::get('about', 'testController@about')->name('about');
-Route::get('bio', 'testController@social')->name('bio');
+Route::get('bio', 'testController@bio')->name('bio');
 Route::get('radio', 'testController@radio')->name('radio');
+Route::get('breakdown','testController@breakdown')->name('breakdown');
 Route::post('updateBio', 'testController@updateBio')->name('updateBio');
 Route::get('schedules', 'testController@schedules')->name('schedules');
 Route::get('streaming', 'testController@streaming')->name('streaming');
@@ -33,6 +34,43 @@ Route::get('albumSongs={album_id}', 'testController@albumSongs')->name('albumSon
 //MP3
 Route::post('singleMp3Upload', 'testController@singleMp3Upload')->name('singleMp3Upload');
 Route::post('albumUpload', 'testController@albumUpload')->name('albumUpload');
+
+//Streaming
+Route::get('update_id{type}', 'streamController@update_id')->name('update_id');
+Route::post('insert_id', 'streamController@insert_id')->name('insert_id');
+
+//Deezer
+Route::get('youtube', 'streamController@youtube')->name('youtube');
+Route::get('spotify', 'streamController@spotify')->name('spotify');
+Route::get('apple', 'streamController@apple')->name('apple');
+Route::get('boomplay', 'streamController@boomplay')->name('boomplay');
+Route::get('mdundo', 'streamController@mdundo')->name('mdundo');
+Route::get('deezer', 'streamController@getDeezer')->name('deezer');
+
+Route::get('overall10', function(){return view('streaming.overall10');})->name('overall10');
+Route::get('region10', function(){return view('streaming.region10');})->name('region10');
+
+//REPORT Streaming
+Route::get('reportYT', 'graphController@reportYT')->name('reportYT');
+Route::get('reportSP', 'graphController@reportSP')->name('reportSP');
+Route::get('reportAPP', 'graphController@reportAPP')->name('reportAPP');
+Route::get('reportBOOM', 'graphController@reportBOOM')->name('reportBOOM');
+Route::get('reportMDN', 'graphController@reportMDN')->name('reportMDN');
+Route::get('reportDZZ', 'graphController@reportDZZ')->name('reportDZZ');
+//Streaming
+
+
+//Social
+Route::get('fb', function() {return view('social.facebook'); });
+Route::get('social_facebook', 'socialController@gotoFacebook')->name('social_facebook');
+Route::get('get_facebook_data', 'socialController@get_facebook_data');
+
+Route::get('reportSP', 'graphController@reportSP')->name('reportSP');
+Route::get('reportAPP', 'graphController@reportAPP')->name('reportAPP');
+Route::get('reportBOOM', 'graphController@reportBOOM')->name('reportBOOM');
+Route::get('reportMDN', 'graphController@reportMDN')->name('reportMDN');
+Route::get('reportDZZ', 'graphController@reportDZZ')->name('reportDZZ');
+//Social
 
 
 
@@ -47,7 +85,7 @@ Route::post('register', 'testController@register_post')->name('registerP');
 //Route::get('{anypath}', 'testController@home')->where('path', '.*');
 
 
- Route::get('breakdown','testController@breakdown')->name('breakdown');
+ 
  
  
 
@@ -74,6 +112,7 @@ Route::get('forgot/{remail}', 'testController@forgot')->name('forgot');
 Route::post('send_reset_email', 'testController@send_reset_email')->name('send_reset_email');
 Route::post('reset/{remail}', 'testController@reset')->name('reset');
 
+
 //Artist private sign up
 Route::get('artist_signup/{remail}', function ($remail)
 {
@@ -82,35 +121,14 @@ Route::get('artist_signup/{remail}', function ($remail)
 
 
 
-//Streaming
-Route::get('update_id{type}', 'streamController@update_id')->name('update_id');
-Route::post('insert_id', 'streamController@insert_id')->name('insert_id');
 
-//Deezer
-Route::get('youtube', 'streamController@youtube')->name('youtube');
-Route::get('spotify', 'streamController@spotify')->name('spotify');
-Route::get('apple', 'streamController@apple')->name('apple');
-Route::get('boomplay', 'streamController@boomplay')->name('boomplay');
-Route::get('mdundo', 'streamController@mdundo')->name('mdundo');
-Route::get('deezer', 'streamController@getDeezer')->name('deezer');
 
-Route::get('overall10', function(){return view('streaming.overall10');})->name('overall10');
+
 Route::get('AjaxOverall10', 'streamController@overall10');
-Route::get('region10', function(){return view('streaming.region10');})->name('region10');
+
 Route::get('AjaxRegion10', 'streamController@region10');
 
 
-//REPORT
-Route::get('reportYT', 'graphController@reportYT')->name('reportYT');
-Route::get('reportSP', 'graphController@reportSP')->name('reportSP');
-Route::get('reportAPP', 'graphController@reportAPP')->name('reportAPP');
-Route::get('reportBOOM', 'graphController@reportBOOM')->name('reportBOOM');
-Route::get('reportMDN', 'graphController@reportMDN')->name('reportMDN');
-Route::get('reportDZZ', 'graphController@reportDZZ')->name('reportDZZ');
-
-
-
-//Streaming
 
 
 //** __________________________________________ADMIN_____________________________________________ **//
@@ -145,6 +163,12 @@ Route::group([ 'prefix' => 'admin'], function(){
 //** __________________________________________ADMIN_____________________________________________ **//
 
 
+
+//FACEBOOK AccessToken
+ Route::get('/facebook', function () {return Socialite::driver('facebook')->redirect(); })->name('login.facebook');
+Route::get('social/facebook/callback', 'socialController@facebook');
+
+
  
 // Clear Config
 
@@ -160,6 +184,6 @@ Route::get('/clear-cache', function() {
     return "config clear";
 
 });
- 
+Route::get('social/fb_privacy', function () {return view('fb_privacy');});
  
  

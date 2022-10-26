@@ -315,9 +315,9 @@ if(isset($songs['metadata']['music'][0]['artists'][0]['name'])) $titles['artist'
 }
 
 
-  public function social() {
+  public function bio() {
     $thisUser=User::where('email', Session::get('logged'))->first();
-    return view('social',compact('thisUser'));
+    return view('bio',compact('thisUser'));
 }
 
 public function streaming() { 

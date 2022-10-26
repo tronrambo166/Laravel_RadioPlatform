@@ -2,31 +2,34 @@
 @section('page')
 
 
-
+<p id="success" class=" float-right bg-warning rounded px-3 py-1 font-weight-bold ">Please click and add your artist id for all platform!</p> 
 <div class="row mx-auto" style="width:90%; background:#161616;" >  
          <div class="col-md-12"> 
              <h4 class="text-center mt-2 text-light">Rewind Cloud Monitoring</h4> <hr> 
 
-       <table class="shadow mb-3 w-100  shadow border table tabil text-light" style="width:90%; background:#1e1e1e;">
+ <table class="shadow mb-3 w-100 bg-white table tabil m-auto">
   <thead>
-    <tr class="  w-100">
-       <p class="text-left py-3 my-0 bg-dark font-weight-bold text-success h5 pl-2">Artist Social</p> 
-
-      
-      <th> Facebook</th>
-      <th> Intagram</th>
-      <th> Twitter</th>
-     
-      
+    <tr class=" bg-dark w-100 m-auto text-center">
+       <div class="links m-auto text-center">
+        <a href="{{route('login.facebook')}}" class="mx-2 btn btn-outline-danger  rounded">Facebook</a>
+         <a href="{{route('spotify')}}" class="mx-2 btn btn-outline-success rounded">Instagram</a>
+          <a href="{{route('deezer')}}" class="mx-2 btn btn-outline-primary rounded">Twitter</a>
+          <a href="{{route('apple')}}" class="mx-2 btn btn-outline-warning  rounded">TikTok</a>
+           
+         
+     </div>  
     </tr>
+
+
+    <tr class=" bg-dark w-100 mx-auto text-center">
+       
+    </tr>
+
+
   </thead>
   <tbody>
     <tr class="border">
-      
-     
-      <td>coming soon...</td>
-      <td>coming soon...</td>
-      <td>coming soon...</td>
+   
     </tr>
     
   </tbody>
@@ -42,7 +45,15 @@
         
 </div>
 
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
+<script type="text/javascript">
+  $('#success').hide();
+  function success_msg(){
+    console.log('success');
+    $('#success').show();
+  }
+</script>
 
           @endsection
         
