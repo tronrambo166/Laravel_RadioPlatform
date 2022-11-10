@@ -63,13 +63,9 @@ Route::get('reportDZZ', 'graphController@reportDZZ')->name('reportDZZ');
 //Social
 Route::get('fb', function() {return view('social.facebook'); });
 Route::get('social_facebook', 'socialController@gotoFacebook')->name('social_facebook');
-Route::get('get_facebook_data', 'socialController@get_facebook_data');
-
-Route::get('reportSP', 'graphController@reportSP')->name('reportSP');
-Route::get('reportAPP', 'graphController@reportAPP')->name('reportAPP');
-Route::get('reportBOOM', 'graphController@reportBOOM')->name('reportBOOM');
-Route::get('reportMDN', 'graphController@reportMDN')->name('reportMDN');
-Route::get('reportDZZ', 'graphController@reportDZZ')->name('reportDZZ');
+Route::get('twitter', 'socialController@twitter')->name('twitter');
+Route::get('instagram', 'socialController@instagram')->name('instagram');
+Route::get('tiktok', 'socialController@tiktok')->name('tiktok');
 //Social
 
 
@@ -169,6 +165,10 @@ Route::group([ 'prefix' => 'admin'], function(){
 Route::get('social/facebook/callback', 'socialController@facebook');
 
 
+// Terms & Privacy
+ Route::get('terms', function(){ return view('policy.terms'); })->name('terms');
+ Route::get('policy', function(){ return view('policy.privacy_policy'); })->name('policy');
+ 
  
 // Clear Config
 

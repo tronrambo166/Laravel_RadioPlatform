@@ -2,9 +2,13 @@
 @section('page')
 
 
-<?php $data= Session::get('data'); echo '<pre>'; print_r( $data['fans_by_gender']); echo '<pre>'; ?>
+<?php $male= Session::get('male'); $female= Session::get('female');
+  if(!isset($male['55-64'])) $age55 = 0; else  $age55 = $male['55-64']; 
+  if(!isset($female['55-64'])) $age55f = 0; else  $age55f = $female['55-64'];
+  ?>
+
 <div class=" mx-auto" style="width:95%; background:#161616;" >  
-   <h4 class="text-center mt-2 text-light">Deezer Report <a href="{{route('deezer')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back</a></h4> 
+   <h4 class="text-center mt-2 text-light">Facebook <a href="{{route('deezer')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back</a></h4> 
     <hr>
          <div class="row"> 
             
@@ -13,22 +17,22 @@
 <?php
  
 $dataPoints1 = array(
-  array("label"=> "13-17", "y"=> 36.12),
-  array("label"=> "18-24", "y"=> 34.87),
-  array("label"=> "25-34", "y"=> 40.30),
-  array("label"=> "35-44", "y"=> 35.30),
-  array("label"=> "45-54", "y"=> 39.50),
-  array("label"=> "55-65", "y"=> 50.82),
-  array("label"=> "65+", "y"=> 74.70)
+  array("label"=> "13-17", "y"=> $male['13-17']),
+  array("label"=> "18-24", "y"=> $male['18-24']),
+  array("label"=> "25-34", "y"=> $male['25-34']),
+  array("label"=> "35-44", "y"=> $male['35-44']),
+  array("label"=> "45-54", "y"=> $male['45-54']),
+  array("label"=> "55-64", "y"=> $age55),
+  array("label"=> "65+", "y"=> $male['65+'])
 );
 $dataPoints2 = array(
-  array("label"=> "13-17", "y"=> 36.12),
-  array("label"=> "18-24", "y"=> 34.87),
-  array("label"=> "25-34", "y"=> 40.30),
-  array("label"=> "35-44", "y"=> 35.30),
-  array("label"=> "45-54", "y"=> 39.50),
-  array("label"=> "55-65", "y"=> 50.82),
-  array("label"=> "65+", "y"=> 74.70)
+  array("label"=> "13-17", "y"=> $female['13-17']),
+  array("label"=> "18-24", "y"=> $female['18-24']),
+  array("label"=> "25-34", "y"=> $female['25-34']),
+  array("label"=> "35-44", "y"=> $female['35-44']),
+  array("label"=> "45-54", "y"=> $female['45-54']),
+  array("label"=> "55-64", "y"=> $age55f),
+  array("label"=> "65+", "y"=> $female['65+'])
 );
   
 ?>
@@ -42,7 +46,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
   animationEnabled: true,
   theme: "light2",
   title:{
-    text: "Average Amount Spent on Real and Artificial X-Mas Trees in U.S."
+    text: "Audience Insights by Age and Gender"
   },
   axisY:{
     includeZero: true
@@ -55,16 +59,16 @@ var chart = new CanvasJS.Chart("chartContainer", {
   },
   data: [{
     type: "column",
-    name: "Real Trees",
+    name: "Male",
     indexLabel: "{y}",
-    yValueFormatString: "$#0.##",
+    yValueFormatString: "#0.##",
     showInLegend: true,
     dataPoints: <?php echo json_encode($dataPoints1, JSON_NUMERIC_CHECK); ?>
   },{
     type: "column",
-    name: "Artificial Trees",
+    name: "Female",
     indexLabel: "{y}",
-    yValueFormatString: "$#0.##",
+    yValueFormatString: "#0.##",
     showInLegend: true,
     dataPoints: <?php echo json_encode($dataPoints2, JSON_NUMERIC_CHECK); ?>
   }]
@@ -85,6 +89,27 @@ function toggleDataSeries(e){
 </script>
 
 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+
+<div class="mt-5 bg-light" id="" style="height: 370px; width: 100%;">
+  <h3 class="bg-light text-center my-4 text-primary">People talking about this page</h3>
+
+  <div class="row text-dark text-center"> 
+  <div class="col-md-6"><h6 class="font-weight-bold">Daily new talking: </h6></div>
+  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('daily_new_taking')}}</h6></div>
+  </div>
+
+   <div class="row text-dark text-center"> 
+  <div class="col-md-6"><h6 class="font-weight-bold">Weekly new talking: </h6></div>
+  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('weekly_new_taking')}}</h6></div>
+  </div>
+
+   <div class="row text-dark text-center"> 
+  <div class="col-md-6"><h6 class="font-weight-bold">Moontly new talking: </h6></div>
+  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('monthly_new_taking')}}</h6></div>
+  </div>
+
+</div>
 
 
 
@@ -198,22 +223,7 @@ function toggleDataSeries(e) {
         
  <div class="col-sm-5 chart2">
 
-<table class="table tabil mb-4 text-white">
-  <thead>
-    <tr>
-      <th scope="col">Date</th>
-      
-      <th scope="col">Fans</th>
-       
-    
-    </tr>
-  </thead>
 
-  <tbody class="bg-light text-dark" id="songs">  
-   
-  </tbody>
-
-</table>
 
 
 </div>

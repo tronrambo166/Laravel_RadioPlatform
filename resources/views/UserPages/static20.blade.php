@@ -5,7 +5,7 @@
 
 <div class="row mx-auto shadow" style="width:90%; background:#161616;">  
          <div class="col-md-3"> 
-            <h5 class="text-center mt-2">The Top 20</h5> <hr>
+            <h5 class="text-center mt-2">The Top 20</h5> <hr> 
 
             <table class="table tabil mb-4 text-white">
   <thead>

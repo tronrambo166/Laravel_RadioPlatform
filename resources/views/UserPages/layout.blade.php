@@ -225,8 +225,13 @@
         
         <footer>
             <div class="row fix fixed-bottom" style="background:black;">
-                <p class="m-auto font-italic text-light py-3 text-responsive small">&copy; Copyright 2022. Rewind Cloud Radio Monitoring, All Rights Reserved</p>
-            </div>
+			 <div class="col-sm-7 text-right" >
+                <p class="text-light  text-light py-3 text-responsive small">&copy; Copyright 2022. Rewind Cloud Radio Monitoring, All Rights Reserved</p>
+            </div>  <div class="col-sm-1" > </div>
+			 <div class="col-sm-4 m-auto" >
+			 <a class="ml-5 text-success nav-link d-inline font-weight-bold" href="terms">Terms</a>
+			 <a class="text-success nav-link d-inline font-weight-bold" href="policy">Privacy Policy</a>
+			</div>
         </footer>
         
     </div>
@@ -619,16 +624,6 @@
                     </div>
 
                 </div>
-
-
-                <!--  USER LOG -->
-
-
-                <!-- HIDDEN  login -->
-                 <!-- HIDDEN  login -->
-                  <!-- HIDDEN  login -->
-
-
 
             </div>
         </div>

@@ -12,9 +12,9 @@
     <tr class=" bg-dark w-100 m-auto text-center">
        <div class="links m-auto text-center">
         <a href="{{route('login.facebook')}}" class="mx-2 btn btn-outline-danger  rounded">Facebook</a>
-         <a href="{{route('spotify')}}" class="mx-2 btn btn-outline-success rounded">Instagram</a>
-          <a href="{{route('deezer')}}" class="mx-2 btn btn-outline-primary rounded">Twitter</a>
-          <a href="{{route('apple')}}" class="mx-2 btn btn-outline-warning  rounded">TikTok</a>
+         <a href="{{route('instagram')}}" class="mx-2 btn btn-outline-success rounded">Instagram</a>
+          <a href="{{route('twitter')}}" class="mx-2 btn btn-outline-primary rounded">Twitter</a>
+          <a href="{{route('tiktok')}}" class="mx-2 btn btn-outline-warning  rounded">TikTok</a>
            
          
      </div>  
