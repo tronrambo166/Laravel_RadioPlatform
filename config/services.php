@@ -36,6 +36,12 @@ return [
     'redirect' => 'http://localhost/laravel_projects/radio/public/social/facebook/callback',
 ],
 
+'instagram' => [
+    'client_id' => env('FACEBOOK_CLIENT_ID'),
+    'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+    'redirect' => 'http://localhost/laravel_projects/radio/public/social/instagram/callback',
+],
+
 
 
 ];

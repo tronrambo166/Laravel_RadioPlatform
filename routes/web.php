@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\homeController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,6 +64,7 @@ Route::get('reportDZZ', 'graphController@reportDZZ')->name('reportDZZ');
 //Social
 Route::get('fb', function() {return view('social.facebook'); });
 Route::get('social_facebook', 'socialController@gotoFacebook')->name('social_facebook');
+Route::get('social_instagram', 'socialController@gotoInsta')->name('social_instagram');
 Route::get('twitter', 'socialController@twitter')->name('twitter');
 Route::get('instagram', 'socialController@instagram')->name('instagram');
 Route::get('tiktok', 'socialController@tiktok')->name('tiktok');
@@ -161,8 +163,16 @@ Route::group([ 'prefix' => 'admin'], function(){
 
 
 //FACEBOOK AccessToken
- Route::get('/facebook', function () {return Socialite::driver('facebook')->redirect(); })->name('login.facebook');
+Route::get('/facebook', function () {return Socialite::driver('facebook')->redirect(); })->name('login.facebook');
 Route::get('social/facebook/callback', 'socialController@facebook');
+
+Route::get('/instagram', function () {Session::put('driver','insta');
+return Socialite::driver('facebook')->redirect(); })->name('login.instagram');
+
+Route::get('social/instagram/callback', 'socialController@instagram');
+
+Route::get('social/tiktok/callback', 'socialController@tiktok_callback');
+
 
 
 // Terms & Privacy

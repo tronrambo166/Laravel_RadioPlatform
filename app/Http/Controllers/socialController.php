@@ -11,8 +11,8 @@ use File;
 use Exception;
 use Http;
 use App\Models\User;
+use App\Models\Instagram;
 use Laravel\Socialite\Facades\Socialite;
-use InstagramScraper\Instagram;
 use Phpfastcache\Helper\Psr16Adapter;
 use Atymic\Twitter\Twitter as TwitterContract;
 use Illuminate\Http\JsonResponse;
@@ -23,8 +23,163 @@ class socialController extends Controller
     public $i=0, $j=0, $cnt2=0, $cnt=1, $k=0;
 
 //FACEBOOK
-public function facebook() 
-    { 
+public function facebook() { 
+
+
+//GramInsta
+	    $driver=Session::get('driver');
+		if(isset($driver) && $driver =='insta')      { 	
+			// insta fb id =200952529947077
+		//"https://graph.facebook.com/v15.0/134895793791914?fields=instagram_business_account&access_token={access-token}"
+
+		$pageId=17841444949513102;// insta business id =17841444949513102
+		// insta fb id =200952529947077		
+		 $data = array();
+         $user = Socialite::driver('facebook')->user(); 
+         $userToken = $user->token;
+         $userId = $user->id; //return $userToken.'`````'.$userId;
+		
+        /*$curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'/insights?metric=impressions,reach,profile_views&period=day&access_token='.$userToken,
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        //'content-type:application/json'    
+        ),
+        ));
+
+        $response=curl_exec($curl); //dd($response);
+        $response=json_decode($response,true);
+        $data['impressions_today'] = $response['data'][0]['values'][1]['value'];
+        $data['impressions_yesterday'] = $response['data'][0]['values'][0]['value']; 
+		
+		$data['reach_today'] = $response['data'][1]['values'][1]['value'];
+        $data['reach_yesterday'] = $response['data'][1]['values'][0]['value']; 
+		
+		$data['profile_views_today'] = $response['data'][2]['values'][1]['value'];
+        $data['profile_views_yester'] = $response['data'][2]['values'][0]['value']; 
+        
+        //echo '<pre>';print_r($data);echo '<pre>'; exit; 
+		
+		
+		
+		//FOLLOWERS
+		
+		 $curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'?fields=business_discovery.username(rewinsta283){followers_count,media_count}&access_token='.$userToken,
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        //'content-type:application/json'    
+        ),
+        ));
+
+        $response=curl_exec($curl); //dd($response);
+        $response=json_decode($response,true);
+       
+        
+        //echo '<pre>';print_r($response);echo '<pre>'; exit;
+           $data['followers'] = $response['business_discovery']['followers_count'];
+         //$data['media'] = $response['business_discovery']['followers_count'];		
+		   Session::put('instaInfo',$data);
+		
+        Session::forget('driver');
+        //return redirect()->route('social_instagram'); */
+		//FOLLOWERS
+		
+		
+		//IMPRESSION REACH last 14 days
+			
+		$curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'/insights?metric=impressions,reach&period=days_28&since=2022-11-02&until=2022-12-02&access_token='.$userToken,
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        //'content-type:application/json'    
+        ),
+        ));
+
+        $response=curl_exec($curl); //dd($response);
+        $response=json_decode($response,true);
+       
+        
+        //echo '<pre>';print_r($response);echo '<pre>'; exit;
+           $data['reach_14'] = $response['data'][1]['values'];
+        	
+		   Session::put('audience_reach',$data['reach_14']);
+		
+		
+		
+		//City/Country Age/Gender
+			
+		 $curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'/insights?metric=audience_city,audience_country,audience_gender_age,audience_locale&period=lifetime&access_token='.$userToken,
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        //'content-type:application/json'    
+        ),
+        ));
+
+        $response=curl_exec($curl); //dd($response);
+        $response=json_decode($response,true);
+       
+        
+        //echo '<pre>';print_r($response);echo '<pre>'; exit;
+
+        //SORTING
+        if($response['data'][2]['values'][0]['value'])
+        $data['audience_gender_age'] = $response['data'][2]['values'][0]['value'];
+        $data['audience_city'] = $response['data'][0]['values'][0]['value'];
+        $data['audience_country'] = $response['data'][1]['values'][0]['value'];
+
+        $maleGram = array(); $femaleGram = array();
+        $resultGram = $data['audience_gender_age'];
+        foreach($resultGram as $key => $value){
+            $key = explode('.',$key);
+            if($key[0] == 'M') $maleGram[$key[1]] = $value;
+            else               $femaleGram[$key[1]] = $value;
+        } 
+        Session::put('maleGram',$maleGram); Session::put('femaleGram',$femaleGram);
+        Session::put('audience_city',$data['audience_city']); 
+         Session::put('audience_country',$data['audience_country']);
+        Session::save();
+         //echo '<pre>';print_r($maleGram);echo '<pre>'; exit;
+           
+        //$data['followers'] = $response['business_discovery']['followers_count'];
+         	
+		   Session::put('instaInfo',$data);
+		
+        Session::forget('driver');
+        return redirect()->route('social_instagram');
+		
+
+		}	
+//GramInsta
+
+
+
+
          $data = array();
          $user = Socialite::driver('facebook')->user(); 
          $userToken = $user->token;
@@ -51,7 +206,7 @@ public function facebook()
         echo '<pre>';print_r($response);echo '<pre>'; exit;
         //$pageToken = $response['data'][0]['access_token'];
         //$pageId = $response['data'][0]['id']; //111090717339468  101772626079890
-
+		
         $error=curl_error($curl);
         if($error) echo $error;  */
 
@@ -266,47 +421,135 @@ public function facebook()
      $result = $querier
     ->withOAuth2Client()
     ->get('tweets/counts/recent', ['query' => 'foo']);
-     echo '<pre>'; print_r($result); echo '<pre>'; exit;
+	
+	$data['tweets'] = $result->data;
+     //echo '<pre>'; print_r($data); echo '<pre>'; exit;
 
     $result = $querier
     ->withOAuth2Client()
     ->get('users/1587075783545217025/followers');
 	 $data['followers'] = $result->meta->result_count;
+	 
+	 return view('social.twitter',compact('data'));
 
     }
-
-
-    public function tiktok()
-    {
-        $client = new Client();
-
-        $url = 'https://www.tiktok.com/@real.shinski';
-        $data= $client->request('GET', $url);
-        $region=$data->filter('#') //->text(); return $region;
-        ->each(function($item){      
-         $this->j++; echo ' // '.$item->text();
-         $this->cnt++;        
-        });
-    }
-
 
 
      public function instagram()
     {
-        $instagram = \InstagramScraper\Instagram::withCredentials(new \GuzzleHttp\Client(), 'nurulrana6', 'rana0000', new Psr16Adapter('Files')); 
-        $instagram->login(); // will use cached session if you want to force login $instagram->login(true)
-        //$instagram->saveSession();  //DO NOT forget this in order to save the session, otherwise have no sense
-        $account = $instagram->getAccount('nurulrana6'); dd($account);
-        $accountMedias = $account->getMedias(); 
-        foreach ($accountMedias as $key  => $accountMedia) {
-            $images[$key] = str_replace("&amp;","&", $accountMedia->getimageHighResolutionUrl());     
-            $path = $images[$key];
-            $imageName = $key.'.png';
-            $img = public_path('insta/images/') . $imageName;
-            file_put_contents($img, file_get_contents($path));
-        }
-        return view('gallery', compact('images'));
+		// insta fb id =200952529947077
+		//"https://graph.facebook.com/v15.0/134895793791914?fields=instagram_business_account&access_token={access-token}"
+
+		$pageId=17841444949513102;// insta business id =17841444949513102
+		// insta fb id =200952529947077		
+		 $data = array();
+         $user = Socialite::driver('facebook')->user(); 
+         $userToken = $user->token;
+         $userId = $user->id; //return $userToken.'`````'.$userId;
+		
+        $curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'/insights?metric=impressions,reach,profile_views&period=day&access_token='.$userToken,
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        //'content-type:application/json'    
+        ),
+        ));
+
+        $response=curl_exec($curl); //dd($response);
+        $response=json_decode($response,true);
+        $data['impressions_today'] = $response['data'][0]['values'][1]['value'];
+        $data['impressions_yesterday'] = $response['data'][0]['values'][0]['value']; 
+		
+		$data['reach_today'] = $response['data'][1]['values'][1]['value'];
+        $data['reach_yesterday'] = $response['data'][1]['values'][0]['value']; 
+		
+		$data['profile_views_today'] = $response['data'][2]['values'][1]['value'];
+        $data['profile_views_yester'] = $response['data'][2]['values'][0]['value']; 
+        
+        //echo '<pre>';print_r($data);echo '<pre>'; exit; 
+		
+		
+		
+		//FOLLOWERS
+		
+		 $curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'?fields=business_discovery.username(rewinsta283){followers_count,media_count}&access_token='.$userToken,
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        //'content-type:application/json'    
+        ),
+        ));
+
+        $response=curl_exec($curl); //dd($response);
+        $response=json_decode($response,true);
+       
+        
+        //echo '<pre>';print_r($response);echo '<pre>'; exit;
+           $data['followers'] = $response['business_discovery']['followers_count'];
+         //$data['media'] = $response['business_discovery']['followers_count'];		
+		   Session::put('instaInfo',$data);
+		
+
+        return redirect()->route('social_instagram');
+
+   
     }
+	
+    public function gotoInsta()
+    {	$insta=Instagram::get();
+        return view('social.instagram',compact('insta'));
+    }
+	
+	
+	
+	
+	 public function tiktok()
+    {
+		$redirect_uri ='https://muziqyrewind.com/social/tiktok/callback';
+		$client_key='aw89q2eh5tn914vy';
+		
+        $curl=curl_init();
+        curl_setopt_array($curl, array(
+       // CURLOPT_URL=> 'https://www.tiktok.com/auth/authorize?client_key='.$client_key.'&response_type=code&scope=user.info.basic,video.list&redirect_uri='.$redirect_uri.'&state=Staging',
+          CURLOPT_URL=> 'https://www.tiktok.com/auth/authorize?client_key=awudsc70wb3h7hsw&response_type=code&scope=user.info.basic,video.list&redirect_uri=muziqyrewind.com&state=Production',
+
+		CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        'content-type:application/json'    
+        ),
+        ));
+
+         $response=curl_exec($curl);//  
+		 //dd($response);
+		 $res=explode('"',$response); //echo $res[1];
+		 //header('location:https://www.tiktok.com/'.$res[1]);
+		 echo "<script> 
+		 window.location.href='https://www.tiktok.com/$res[1]' </script>";
+        //$response=json_decode($response,true);       
+        //echo '<pre>';print_r($response);echo '<pre>';exit;
+    }
+	
+	public function tiktok_callback()
+    { 
+	return 'inside';
+	}
 
 
 }
