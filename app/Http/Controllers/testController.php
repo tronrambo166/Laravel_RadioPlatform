@@ -510,6 +510,56 @@ public function updateBio(Request $hos)
 
 
 
+public function registerB(Request $hos)
+    {    
+    
+          if($hos->image!=''){
+          $image=$hos->file('image');
+          $uniqid=hexdec(uniqid());
+          $ext=strtolower($image->getClientOriginalExtension());
+          $create_name=$uniqid.'.'.$ext; 
+          $loc='images/artists';
+          $image->move($loc, $create_name);
+          $image=$create_name;      
+   }      else $image = 'user.png';
+   //SINGLE IMG
+           $stage_name=$hos->stage_name;
+           $email=$hos->email;
+           $password=Hash::make($hos->password);
+           $phone=$hos->phone;
+           
+        $user= User::where('email', $email)->get(); 
+        $stage= User::where('stage_name', $stage_name)->get();
+              
+          if($user->count() >0 ) {
+         
+          Session::put('email','Email already exists'); return  redirect('/');
+          }
+          
+           else if($stage->count() >0 ) {
+         
+          Session::put('email','Business Name already exists'); return  redirect('/');
+          }
+      
+      else{
+
+          $Artist = User::create([
+          'stage_name' =>  $stage_name,
+          'email' =>  $email,
+          'password' =>  $password,
+          'image' => $image,
+          'phone' => $phone,
+          'approved' => 1,
+          'business' => 1
+          ]);
+          Session::put('logged',$email);
+          return redirect('home');
+     }
+
+    }
+
+
+
 public function login_post(Request $formData)
 {  
 

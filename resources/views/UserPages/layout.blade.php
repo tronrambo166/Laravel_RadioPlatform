@@ -278,7 +278,9 @@
             <div class="col-md-5"></div>                
             
             <button  id="user"onclick="user()" class="w-75 btn btn-light font-weight-bold px-3 mr-2">{{ __('User') }}</button> <br><br>
-            <button  id="artist" onclick="artist()" class="font-weight-bold w-75 btn btn-success text-warning px-3 mr-2">{{ __("Artist's Sign Up Request") }}</button>
+            <button  id="artist" onclick="artist()" class="font-weight-bold w-75 btn btn-light text-warning px-3 mr-2">{{ __("Artist's Sign Up Request") }}</button>
+
+            <button  id="business" onclick="business()" class="mt-2 font-weight-bold w-75 btn btn-light text-danger px-3 mr-2">{{ __("Business Sign Up") }}</button>
 
                                           </div>
                
@@ -504,6 +506,115 @@
 
                 <!-- HIDDEN USER REG -->
 
+
+                <!-- HIDDEN Business REG -->
+
+                <div id="business_reg" class=" collapse card-body">
+                    <form method="POST" action="{{ route('registerB') }}" enctype="multipart/form-data">
+                        @csrf    
+                         
+
+                         <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-left">{{ __('Business Name') }} <span title="Required" class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="stage_name" value="{{ old('fname') }}" required autocomplete="name" autofocus>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-left">{{ __('E-Mail') }} <span title="Required" class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-left">{{ __('Password') }} <span title="Required" class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{ old('password') }}" required autocomplete="password">
+
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="phone" class="col-md-4 col-form-label text-md-left">{{ __('Telephone') }} <span title="Required" class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <input id="phone" type="number" class="form-control @error('email') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required autocomplete="phone">
+
+                                @error('phone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="phone" class="col-md-4 col-form-label text-md-left">{{ __('Image') }} <span title="Required" class="text-danger">*</span></label>
+
+                            <div class="col-md-6">
+                                <input id="file" type="file" class="form-control @error('email') is-invalid @enderror" name="image" autocomplete="phone">
+
+                                @error('phone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="row mb-4">
+                            <div class="col-md-12 ">
+                                <button type="submit" class="mt-3 w-25 d-block mx-auto btn btn-outline-success">
+                                    {{ __('Register') }}
+                                </button>
+                            </div>
+                            </div> <hr>
+
+                              <div class="row mb-0">
+                            <div class="col-md-12">
+                                <a href="{{route('login')}}" class=" w-25 d-block mx-auto btn btn-outline-danger">
+                                    {{ __('Cancel') }}
+                                </a>
+                            </div>
+                            
+                        </div>
+                    </form>
+
+                </div>
+                <!-- HIDDEN Business REG -->
+
+
                 </div>
                  <!-- HIDDEN USER REG Card ends-->
 
@@ -663,6 +774,7 @@
 
 <script type="text/javascript">
     $('#login').css('border-bottom', '2px solid red');
+    $('#business_reg').hide();
     
     function login(){
     $('#register').css('border-bottom', 'none');    
@@ -714,21 +826,38 @@
     function user(){
     $('#artist').removeClass('btn-success');
     $('#user').removeClass('btn-light');
+    $('#business').removeClass('btn-success');
     $('#user').addClass('btn-success');
 
     $('#user_reg').show();
     $('#artist_reg').hide();
+     $('#business_reg').hide();
     }
 
      function artist(){
     $('#user').removeClass('btn-success');
     $('#artist').removeClass('btn-light');
+     $('#business').removeClass('btn-success');
     $('#artist').addClass('btn-success');
 
     $('#user_reg').hide();
     $('#artist_reg').show();
+     $('#business_reg').hide();
     
     }
+
+     function business(){
+    $('#user').removeClass('btn-success');
+    $('#artist').removeClass('btn-success');
+    $('#business').removeClass('btn-light');
+    $('#business').addClass('btn-success');
+
+    $('#user_reg').hide();
+    $('#artist_reg').hide();
+    $('#business_reg').show();
+    
+    }
+
 
 
 </script>

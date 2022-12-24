@@ -15,6 +15,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.5",
+        "socialiteproviders/tiktok": "^4.1",
         "weidner/goutte": "^2.2"
     },
     "require-dev": {

@@ -67,7 +67,7 @@ Route::get('social_facebook', 'socialController@gotoFacebook')->name('social_fac
 Route::get('social_instagram', 'socialController@gotoInsta')->name('social_instagram');
 Route::get('twitter', 'socialController@twitter')->name('twitter');
 Route::get('instagram', 'socialController@instagram')->name('instagram');
-Route::get('tiktok', 'socialController@tiktok')->name('tiktok');
+//Route::get('tiktok', 'socialController@tiktok')->name('tiktok');
 //Social
 
 
@@ -79,6 +79,7 @@ Route::post('login', 'testController@login_post')->name('loginP');
 Route::get('logoutA', 'testController@logout')->name('logoutA');
 Route::get('register', 'testController@register')->name('register');
 Route::post('register', 'testController@register_post')->name('registerP');
+Route::post('registerB', 'testController@registerB')->name('registerB');
 
 //Route::get('{anypath}', 'testController@home')->where('path', '.*');
 
@@ -173,6 +174,10 @@ Route::get('social/instagram/callback', 'socialController@instagram');
 
 Route::get('social/tiktok/callback', 'socialController@tiktok_callback');
 
+Route::get('/tiktok', function () {
+    return Socialite::driver('tiktok')->redirect(); })->name('tiktok');
+
+Route::get('/tiktok_social','socialController@tiktok_social')->name('tiktok_social');
 
 
 // Terms & Privacy

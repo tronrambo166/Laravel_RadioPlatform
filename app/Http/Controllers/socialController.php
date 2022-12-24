@@ -12,11 +12,13 @@ use Exception;
 use Http;
 use App\Models\User;
 use App\Models\Instagram;
+use App\Models\Audience;
 use Laravel\Socialite\Facades\Socialite;
 use Phpfastcache\Helper\Psr16Adapter;
 use Atymic\Twitter\Twitter as TwitterContract;
 use Illuminate\Http\JsonResponse;
 use Twitter;
+use Auth;
 
 class socialController extends Controller
 {
@@ -334,9 +336,29 @@ public function facebook() {
         $response=curl_exec($curl); //dd($response);
         $response=json_decode($response,true);
         $data['fans_by_city'] = $response['data'][0]['values'][1]['value'];
-        //$data['fans_by_cityW'] = $response['data'][1]['values'][1]['value']; 
-        //$data['fans_by_cityM'] = $response['data'][2]['values'][1]['value'];
-        //echo '<pre> taking = ';print_r($response);echo '<pre>'; exit;
+
+        //echo '<pre> taking = ';print_r($data['fans_by_city']);echo '<pre>'; exit;
+
+        //Part 2.2: !!! Audience by Country !!!
+        $curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'/insights/page_fans_country?access_token='.$pageToken,
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        'content-type:application/json'    
+        ),
+        ));
+
+        $response=curl_exec($curl); //dd($response);
+        $response=json_decode($response,true);
+        $data['fans_by_country'] = $response['data'][0]['values'][1]['value'];
+
+        //echo '<pre> taking = ';print_r($data['fans_by_country']);echo '<pre>'; exit;
 
 
 
@@ -397,10 +419,62 @@ public function facebook() {
             if($key[0] == 'M') $male[$key[1]] = $value;
             else               $female[$key[1]] = $value;
         } 
+        arsort($result);  
+
         Session::put('male',$male); Session::put('female',$female);
+        Session::put('fans_city',$data['fans_by_city']);
+        Session::put('fans_country',$data['fans_by_country']);
+
         Session::put('daily_new_taking',$data['daily_new_taking']);
         Session::put('weekly_new_taking',$data['weekly_new_taking']);
         Session::put('monthly_new_taking',$data['monthly_new_taking']);
+        Session::put('daily_new_likes',$data['daily_new_likes']);
+        Session::put('weekly_new_likes',$data['weekly_new_likes']);
+        Session::put('monthly_new_likes',$data['monthly_new_likes']);
+
+        Session::put('fb_info',$data);
+        Session::save();
+
+        //DB INSERT
+        //fans
+        $fb_info=array();
+        $fans_age=''; $fans_city='';$fans_country='';$i=0;
+        foreach($result as $key => $value)
+        {   if($i>4) break;
+            $fans_age = $fans_age.$key.','; $i++;
+        } 
+
+        //city
+        arsort($data['fans_by_city']);$i=0;
+         foreach($data['fans_by_city'] as $key => $value)
+        {   if($i>30) break;
+            $fans_city = $fans_city.$key.';'; $i++;
+        } 
+
+        //country
+        arsort($data['fans_by_country']);$i=0;
+         foreach($data['fans_by_country'] as $key => $value)
+        {   if($i>30) break;
+            $fans_country = $fans_country.$key.','; $i++;
+        } 
+
+        $user=User::where('email',Session::get('logged'))->first();
+        $user_id=$user->id;
+        $user = Audience::where('user_id',$user_id)->first();
+        if(!$user)
+        {
+            Audience::create([
+            'user_id' => $user_id,
+            'city' => $fans_city,
+            'country' => $fans_country,
+            'age' => $fans_age,
+        ]);
+        }
+        
+
+        //DB INSERT
+
+
         return redirect()->route('social_facebook');
 
 
@@ -422,15 +496,31 @@ public function facebook() {
     ->withOAuth2Client()
     ->get('tweets/counts/recent', ['query' => 'foo']);
 	
-	$data['tweets'] = $result->data;
-     //echo '<pre>'; print_r($data); echo '<pre>'; exit;
+	//$data['tweets'] = $result->data;
+    // echo '<pre>'; print_r($data); echo '<pre>'; exit;
 
     $result = $querier
     ->withOAuth2Client()
     ->get('users/1587075783545217025/followers');
 	 $data['followers'] = $result->meta->result_count;
+
+     //tweets
+     $res = $querier
+    ->withOAuth2Client()
+    ->get('users/1587075783545217025/tweets'); //users/:id/mentions
+     $tweets = $res->data;
+     //echo '<pre>'; print_r($tweets);echo '<pre>'; exit;
+
+     //mentions
+     $res = $querier
+    ->withOAuth2Client()
+    ->get('users/1587075783545217025/mentions'); //users/:id/mentions
+     if(isset($res->data)) $mentions = $res->data;
+     else $mentions = 0;
+     
+
 	 
-	 return view('social.twitter',compact('data'));
+	 return view('social.twitter',compact('data','tweets','mentions'));
 
     }
 
@@ -513,17 +603,26 @@ public function facebook() {
     }
 	
 	
-	
+	 public function tiktok_social()
+    { 
+        $data=$_GET['data'];  $user=$_GET['user'];
+        $videos=json_decode($data,true);
+        $user=json_decode($user,true);
+        //echo '<pre>';print_r($data);echo '<pre>';exit;
+        $tweets='';
+        $mentions='';
+        return view('social.tiktok',compact('videos','user','mentions'));
+    }
 	
 	 public function tiktok()
     {
 		$redirect_uri ='https://muziqyrewind.com/social/tiktok/callback';
-		$client_key='aw89q2eh5tn914vy';
+		$client_key='awudsc70wb3h7hsw';
 		
         $curl=curl_init();
         curl_setopt_array($curl, array(
        // CURLOPT_URL=> 'https://www.tiktok.com/auth/authorize?client_key='.$client_key.'&response_type=code&scope=user.info.basic,video.list&redirect_uri='.$redirect_uri.'&state=Staging',
-          CURLOPT_URL=> 'https://www.tiktok.com/auth/authorize?client_key=awudsc70wb3h7hsw&response_type=code&scope=user.info.basic,video.list&redirect_uri=muziqyrewind.com&state=Production',
+          CURLOPT_URL=> 'https://www.tiktok.com/auth/authorize?client_key=awudsc70wb3h7hsw&response_type=code&scope=user.info.basic,video.list&redirect_uri=muziqyrewind.com&state=Staging',
 
 		CURLOPT_RETURNTRANSFER=> TRUE,
         CURLOPT_ENCODING=> '',
@@ -548,8 +647,62 @@ public function facebook() {
 	
 	public function tiktok_callback()
     { 
-	return 'inside';
-	}
+	      $code = $_GET['code'];
+       // echo "<script> 
+         //window.location.href='http://localhost/laravel_projects/radio/public/social/tiktok/callback?code=$code' </script>";
+       
+        $client_key  ='awudsc70wb3h7hsw'; 
+        $client_secret  ='78827251ba07d82c5781f4b38fdfec3a';
+        
+        //POST format
+        $curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://open-api.tiktok.com/oauth/access_token/?client_key='.$client_key.'&client_secret='.$client_secret.'&code='.$code.'&grant_type=authorization_code',
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'POST',
+        
+        CURLOPT_HTTPHEADER=> array(
+       // 'content-type:application/json'
+        
+        ),
+        ));
+        
+        $response=curl_exec($curl);
+        $response=json_decode($response,true);
+        //echo '<pre>';print_r($response);echo '<pre>';
+         $error=curl_error($curl);
+        if($error) echo $error;
+        
+        $access_token = $response['data']['access_token'];
+        
+        
+        //GET USER INFO
+        $curl=curl_init();
+        curl_setopt_array($curl, array(
+          CURLOPT_URL=> 'https://open.tiktokapis.com/v2/user/info/?fields=open_id,union_id,follower_count,likes_count',
+
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        'Authorization: Bearer '.$access_token    
+        ),
+        ));
+
+         $response=curl_exec($curl);//  
+        $response=json_decode($response,true);       
+        echo '<pre>';print_r($response);echo '<pre>';exit;
+        
+
+}
 
 
+//END
 }
