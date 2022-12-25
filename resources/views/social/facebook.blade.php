@@ -2,7 +2,7 @@
 @section('page')
 
 <style type="text/css"> .smalls{color: black;font-size: 13px;} </style>
-@php $data = Session::get('fb_info'); @endphp
+@php $data = Session::get('fb_info');  @endphp
 <div class=" mx-auto" style="width:95%; background:#161616;" >  
    <h4 class="text-center my-3 text-light ">Facebook Insights <a href="{{route('youtube')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back</a>
    </h4> <hr>
@@ -267,16 +267,60 @@ function toggleDataSeries(e){
 <div class="col-md-4 bg-light"  style="overflow-y:auto;height: 427px;">
   
   <h3 class="mx-2 py-2 h5">Top 20 pages with similar audience</h3>
+
+  @php $max_factor=25; $max_match=95;$counter=0;$counter_c=0;$counter_cc=0; 
+
+  $my_ages = explode(',',$audience_me->age);
+  $my_cities = explode(';',$audience_me->city);
+  $my_countries = explode(',',$audience_me->country);
+  @endphp
   
-  @for($i=0;$i<10;$i++)
-  <div class="row mx-2">
-    <p class="small font-weight-bold text-info">Sunlight</p> <p class="text-muted small ml-auto">70% matching</p>
-  </div>
+  @foreach($audience_all as $all)
+  @php 
+  $ages = explode(',',$all->age);
+  $cities = explode(';',$all->city);
+  $countries = explode(',',$all->country);
+
+//AGES
+  foreach($ages as $age){
+  foreach($my_ages as $m_age){
+  if($age === $m_age)
+  {  $counter++; }
+}}
+  if($counter>6)
+  $age_percent = 99;
+  else $age_percent = ($counter/6)*95; $counter =0;
+
+//CITY
+  foreach($cities as $city){
+  foreach($my_cities as $m_city){
+  if($city == $m_city)
+  {  $counter_c++; }
+}}
+  if($counter_c>$max_factor)
+  $city_percent = 99;
+  else $city_percent = ($counter_c/$max_factor)*95; $counter_c =0;
+
+//COUNTRY
+  foreach($countries as $country){
+  foreach($my_countries as $m_country){
+  if($country == $m_country)
+  {  $counter_cc++; }
+}}
+  if($counter_cc>$max_factor)
+  $country_percent = 99;
+  else $country_percent = ($counter_cc/$max_factor)*95; $counter_cc =0;
+
+  @endphp
+
+  
+
 
   <div class="row mx-2">
-    <p class="small font-weight-bold text-info">Coke</p> <p class="text-muted small ml-auto">60% matching</p>
+    <p class="small font-weight-bold text-info">{{$all->business_name}}</p> <p class="text-muted small ml-auto">{{round(($country_percent+$city_percent+$age_percent)/3) }}% matching</p>
   </div>
-  @endfor
+
+  @endforeach
 
 
 </div>

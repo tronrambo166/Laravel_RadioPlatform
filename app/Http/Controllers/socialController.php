@@ -460,6 +460,7 @@ public function facebook() {
 
         $user=User::where('email',Session::get('logged'))->first();
         $user_id=$user->id;
+        $business_name=$user->stage_name;
         $user = Audience::where('user_id',$user_id)->first();
         if(!$user)
         {
@@ -468,6 +469,7 @@ public function facebook() {
             'city' => $fans_city,
             'country' => $fans_country,
             'age' => $fans_age,
+            '$business_name' => $business_name
         ]);
         }
         
@@ -482,7 +484,11 @@ public function facebook() {
     }
     public function gotoFacebook()
     {
-        return view('social.facebook');
+        $user=User::where('email',Session::get('logged'))->first();
+
+        $audience_me = Audience::where('user_id',$user->id)->first();
+        $audience_all = Audience::where('user_id','<>',$user->id)->get();
+        return view('social.facebook', compact('audience_all','audience_me'));
     }
 
 

@@ -15,8 +15,7 @@ use PDF;
 use Mail;
 
 class testController extends Controller
-{
-   
+{ 
 
 public function home() { 
   $thisUser=User::where('email', Session::get('logged'))->first();
