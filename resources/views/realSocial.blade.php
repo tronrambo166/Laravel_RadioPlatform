@@ -1,10 +1,22 @@
 @extends('layout') 
 @section('page')
 
+@php
+//INSTA ID CHECK
+            $art=DB::table('users')->where('email', Session::get('logged'))->first();
+            $check_insta =$art->insta_pageid_of_fb; 
+            $check_twit =$art->twitter_id; 
+//INSTA ID CHECK 
+@endphp
+
+@if(Session::has('social_id')) 
+ <div class=" w-50 m-auto text-center bg-light"><p class="text-success">{{Session::get('social_id')}} @php Session::forget('social_id'); @endphp </p> </div>
+  @endif
+
 
 
 <div class="row mx-auto" style="width:90%; background:#161616;" >  
-         <div class="col-md-12"> 
+         <div class="col-md-10"> 
              <h4 class="text-center mt-2 text-light">Rewind Cloud Monitoring</h4> <hr> 
 
  <table class="shadow mb-3 w-100 bg-white table tabil m-auto">
@@ -12,8 +24,20 @@
     <tr class=" bg-dark w-100 m-auto text-center">
        <div class="links m-auto text-center">
         <a href="{{route('login.facebook')}}" class="mx-2 btn btn-outline-danger  rounded">Facebook</a>
+
+        @if($check_insta == null)
+         <a onclick="alert('Please add your page Id first');"href="{{route('socialIds','Insta')}}" class="mx-2 btn btn-outline-success rounded">Instagram</a>
+         @else
          <a href="{{route('login.instagram')}}" class="mx-2 btn btn-outline-success rounded">Instagram</a>
-          <a href="{{route('twitter')}}" class="mx-2 btn btn-outline-primary rounded">Twitter</a>
+         @endif
+
+
+         @if($check_twit == null)
+         <a onclick="alert('Please add your profile Id first');"href="{{route('socialIds','Twitter')}}" class="mx-2 btn btn-outline-success rounded">Twitter</a>
+         @else
+         <a href="{{route('twitter')}}" class="mx-2 btn btn-outline-primary rounded">Twitter</a>
+         @endif
+
           <a href="{{route('tiktok')}}" class="mx-2 btn btn-outline-warning  rounded">TikTok</a>
            
          
@@ -42,7 +66,15 @@
 
              </div>  
 
-        <a href='{SERVER_ENDPOINT_OAUTH}'>Continue with TikTok</a>
+
+ <div class="col-md-2">
+  <a style="font-size: 11px;" href="{{route('socialIds','Twitter')}}" class="py-1 small mx-2 btn btn-light rounded">Update Twitter id</a>
+
+   <a style="font-size: 11px;" href="{{route('socialIds','Insta')}}" class="py-1 pr-4 mt-2 small mx-2 btn btn-light rounded">Update Insta id</a>
+
+ </div>            
+
+      
 </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>

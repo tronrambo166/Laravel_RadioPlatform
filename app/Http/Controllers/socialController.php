@@ -24,22 +24,80 @@ class socialController extends Controller
 {
     public $i=0, $j=0, $cnt2=0, $cnt=1, $k=0;
 
+    //TWITTER/INSTA ID COLLECT
+     public function socialIds($platform)
+    { return view('social.insert_id',compact('platform')); }
+
+    public function insert_id(Request $req)
+    { 
+    $art=User::where('email', Session::get('logged'))->first();
+    $art_id=$art->id;
+
+    if($req->type == "Insta")
+    {
+     User::where('id',$art_id)->update([
+        'insta_pageid_of_fb' => $req->insta_pageid_of_fb
+        ]);
+    }
+    else{
+        User::where('id',$art_id)->update([
+        'twitter_id' => $req->twitter_id
+        ]);
+    }
+
+
+    Session::put('social_id','Id added!');
+        return redirect('social');
+}
+
+
 //FACEBOOK
 public function facebook() { 
+$collect = User::where('email', Session::get('logged'))->first();
+$insta_id =$collect->insta_pageid_of_fb;
 
-
-//GramInsta
+//GRAM-INSTA
 	    $driver=Session::get('driver');
 		if(isset($driver) && $driver =='insta')      { 	
-			// insta fb id =200952529947077
-		//"https://graph.facebook.com/v15.0/134895793791914?fields=instagram_business_account&access_token={access-token}"
-
-		$pageId=17841444949513102;// insta business id =17841444949513102
-		// insta fb id =200952529947077		
-		 $data = array();
+ 
+// insta fb id =200952529947077 -> found on page view source -> search 'delegate_page_id';
+//"https://graph.facebook.com/v15.0/134895793791914?fields=instagram_business_account&access_token={access-token}"
+     
+         $data = array();
          $user = Socialite::driver('facebook')->user(); 
          $userToken = $user->token;
          $userId = $user->id; //return $userToken.'`````'.$userId;
+ //INSTA BUSINESS ID
+ $insta_fb_id = $insta_id;//200952529947077;
+        $curl=curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$insta_fb_id.'?fields=instagram_business_account&access_token='.$userToken,
+        CURLOPT_RETURNTRANSFER=> TRUE,
+        CURLOPT_ENCODING=> '',
+        CURLOPT_MAXREDIRS=> 10,
+        CURLOPT_TIMEOUT=> 30,
+        CURLOPT_HTTP_VERSION=> CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST=> 'GET',
+        CURLOPT_HTTPHEADER=> array(
+        //'content-type:application/json'    
+        ),
+        ));
+
+        $response=curl_exec($curl); //dd($response);
+        $response=json_decode($response,true); 
+        if(!isset($response['instagram_business_account'])) {
+            Session::put('curl_error', 'Instagram not connected or Invalid page Id, please update your page Id!');
+            Session::save();
+            return redirect('social');
+        }
+        
+        $insta_business_id = $response['instagram_business_account']['id'];
+        //echo '<pre>';print_r($response);echo '<pre>'; exit;
+        $pageId=$insta_business_id;//17841444949513102;// insta business id =17841444949513102 
+//INSTA BUSINESS ID
+
+		
+		
 		
         /*$curl=curl_init();
         curl_setopt_array($curl, array(
@@ -58,18 +116,13 @@ public function facebook() {
         $response=curl_exec($curl); //dd($response);
         $response=json_decode($response,true);
         $data['impressions_today'] = $response['data'][0]['values'][1]['value'];
-        $data['impressions_yesterday'] = $response['data'][0]['values'][0]['value']; 
-		
+        $data['impressions_yesterday'] = $response['data'][0]['values'][0]['value']; 	
 		$data['reach_today'] = $response['data'][1]['values'][1]['value'];
         $data['reach_yesterday'] = $response['data'][1]['values'][0]['value']; 
-		
 		$data['profile_views_today'] = $response['data'][2]['values'][1]['value'];
-        $data['profile_views_yester'] = $response['data'][2]['values'][0]['value']; 
-        
+        $data['profile_views_yester'] = $response['data'][2]['values'][0]['value'];   
         //echo '<pre>';print_r($data);echo '<pre>'; exit; 
-		
-		
-		
+			
 		//FOLLOWERS
 		
 		 $curl=curl_init();
@@ -85,26 +138,24 @@ public function facebook() {
         //'content-type:application/json'    
         ),
         ));
-
         $response=curl_exec($curl); //dd($response);
-        $response=json_decode($response,true);
-       
-        
+        $response=json_decode($response,true);             
         //echo '<pre>';print_r($response);echo '<pre>'; exit;
            $data['followers'] = $response['business_discovery']['followers_count'];
          //$data['media'] = $response['business_discovery']['followers_count'];		
-		   Session::put('instaInfo',$data);
-		
+		   Session::put('instaInfo',$data);		
         Session::forget('driver');
         //return redirect()->route('social_instagram'); */
 		//FOLLOWERS
 		
 		
 		//IMPRESSION REACH last 14 days
-			
-		$curl=curl_init();
+        $start ='2022-11-01';//date('Y-m-d');
+        $end ='2022-12-01';//date('Y-m-d',strtotime($start.' +30 days'));
+        
+        $curl=curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'/insights?metric=impressions,reach&period=days_28&since=2022-11-02&until=2022-12-02&access_token='.$userToken,
+        CURLOPT_URL=> 'https://graph.facebook.com/'.$pageId.'/insights?metric=impressions,reach&period=days_28&since='.$start.'&until='.$end.'&access_token='.$userToken,
         CURLOPT_RETURNTRANSFER=> TRUE,
         CURLOPT_ENCODING=> '',
         CURLOPT_MAXREDIRS=> 10,
@@ -119,6 +170,12 @@ public function facebook() {
         $response=curl_exec($curl); //dd($response);
         $response=json_decode($response,true);
        
+        $error=curl_error($curl);
+        if($error) {
+            Session::put('curl_error', $error['message']);
+            Session::save();
+            return redirect('social');
+        }
         
         //echo '<pre>';print_r($response);echo '<pre>'; exit;
            $data['reach_14'] = $response['data'][1]['values'];
@@ -177,7 +234,7 @@ public function facebook() {
 		
 
 		}	
-//GramInsta
+//GRAM-INSTA
 
 
 
@@ -463,13 +520,13 @@ public function facebook() {
         $business_name=$user->stage_name;
         $user = Audience::where('user_id',$user_id)->first();
         if(!$user)
-        {
+        { 
             Audience::create([
             'user_id' => $user_id,
             'city' => $fans_city,
             'country' => $fans_country,
             'age' => $fans_age,
-            '$business_name' => $business_name
+            'business_name' => $business_name
         ]);
         }
         
@@ -492,41 +549,47 @@ public function facebook() {
     }
 
 
-    public function twitter()
+   public function twitter()
     {
-    $data = array(); //user-id = 1587075783545217025
+    $collect = User::where('email', Session::get('logged'))->first();
+    $twitt_id =$collect->twitter_id;
+
+    $data = array(); 
+    $user_id = $twitt_id;//1587075783545217025; 
+    // twiter profile->view source->search 'user_id';//1616803039956045824(sohaan)
     $querier = \Atymic\Twitter\Facade\Twitter::forApiV2()
     ->getQuerier();
 
      $result = $querier
     ->withOAuth2Client()
     ->get('tweets/counts/recent', ['query' => 'foo']);
-	
-	//$data['tweets'] = $result->data;
+
+    //$data['tweets'] = $result->data;
     // echo '<pre>'; print_r($data); echo '<pre>'; exit;
 
     $result = $querier
     ->withOAuth2Client()
-    ->get('users/1587075783545217025/followers');
-	 $data['followers'] = $result->meta->result_count;
+    ->get('users/'.$user_id.'/followers');
+
+     $data['followers'] = $result->meta->result_count;
 
      //tweets
      $res = $querier
     ->withOAuth2Client()
-    ->get('users/1587075783545217025/tweets'); //users/:id/mentions
+    ->get('users/'.$user_id.'/tweets'); //users/:id/mentions
      $tweets = $res->data;
      //echo '<pre>'; print_r($tweets);echo '<pre>'; exit;
 
      //mentions
      $res = $querier
     ->withOAuth2Client()
-    ->get('users/1587075783545217025/mentions'); //users/:id/mentions
+    ->get('users/'.$user_id.'/mentions'); //users/:id/mentions
      if(isset($res->data)) $mentions = $res->data;
      else $mentions = 0;
      
 
-	 
-	 return view('social.twitter',compact('data','tweets','mentions'));
+     
+     return view('social.twitter',compact('data','tweets','mentions'));
 
     }
 

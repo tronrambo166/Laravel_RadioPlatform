@@ -2,9 +2,10 @@
 @section('page')
 
 <style type="text/css"> .smalls{color: black;font-size: 13px;} </style>
+
 @php $data = Session::get('fb_info');  @endphp
 <div class=" mx-auto" style="width:95%; background:#161616;" >  
-   <h4 class="text-center my-3 text-light ">Facebook Insights <a href="{{route('youtube')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back</a>
+   <h4 class="text-center my-3 text-light ">Facebook Insights <a href="{{route('social')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back</a>
    </h4> <hr>
 
 
@@ -223,39 +224,39 @@ function toggleDataSeries(e){
 
 <div class="mt-2 px-5 bg-light" id="" style="height: 370px; width: 100%;">
 
-  <h3 class="bg-light text-primary">Total Likes</h3>
+  <h3 class=" h5  pt-3 bg-light text-success">Total Likes</h3>
 
   <div class="row text-dark "> 
-  <div class="col-md-4"><h6 class="font-weight-bold">Daily new Likes: </h6></div>
-  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('daily_new_likes')}}</h6></div>
+  <div class="col-md-4"><p class="font-weight-bold">Daily new Likes: </p></div>
+  <div class="col-md-6"><p class="font-weight-bold">{{Session::get('daily_new_likes')}}</p></div>
   </div>
 
    <div class="row text-dark "> 
-  <div class="col-md-4"><h6 class="font-weight-bold">Weekly new Likes: </h6></div>
-  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('weekly_new_likes')}}</h6></div>
+  <div class="col-md-4"><p class="font-weight-bold">Weekly new Likes: </p></div>
+  <div class="col-md-6"><p class="font-weight-bold">{{Session::get('weekly_new_likes')}}</p></div>
   </div>
 
    <div class="row text-dark "> 
-  <div class="col-md-4"><h6 class="font-weight-bold">Moontly new Likes: </h6></div>
-  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('monthly_new_likes')}}</h6></div>
+  <div class="col-md-4"><p class="font-weight-bold">Moontly new Likes: </p></div>
+  <div class="col-md-6"><p class="font-weight-bold">{{Session::get('monthly_new_likes')}}</p></div>
   </div>
 
 
-  <h3 class="bg-light  my-4 text-primary">People talking about this page</h3>
+  <h3 class="h5 bg-light  my-4 text-success">People talking about this page</h3>
 
   <div class="row text-dark "> 
-  <div class="col-md-4"><h6 class="font-weight-bold">Daily new talking: </h6></div>
-  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('daily_new_taking')}}</h6></div>
+  <div class="col-md-4"><p class="font-weight-bold">Daily new talking: </p></div>
+  <div class="col-md-6"><p class="font-weight-bold">{{Session::get('daily_new_taking')}}</p></div>
   </div>
 
    <div class="row text-dark "> 
-  <div class="col-md-4"><h6 class="font-weight-bold">Weekly new talking: </h6></div>
-  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('weekly_new_taking')}}</h6></div>
+  <div class="col-md-4"><p class="font-weight-bold">Weekly new talking: </p></div>
+  <div class="col-md-6"><p class="font-weight-bold">{{Session::get('weekly_new_taking')}}</p></div>
   </div>
 
    <div class="row text-dark "> 
-  <div class="col-md-4"><h6 class="font-weight-bold">Moontly new talking: </h6></div>
-  <div class="col-md-6"><h6 class="font-weight-bold">{{Session::get('monthly_new_taking')}}</h6></div>
+  <div class="col-md-4"><p class="font-weight-bold">Moontly new talking: </p></div>
+  <div class="col-md-6"><p class="font-weight-bold">{{Session::get('monthly_new_taking')}}</p></div>
   </div>
 
 </div>
@@ -324,7 +325,7 @@ function toggleDataSeries(e){
 
 
 </div>
- <button class="btn btn-dark font-weight-bold border border-success ml-auto">Download Report</button>
+<!-- <button class="btn btn-dark font-weight-bold border border-success ml-auto">Download Report</button> -->
 
 
 

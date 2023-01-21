@@ -5,7 +5,7 @@
 
 <div class=" mx-auto" style="width:95%; background:#161616;" >  
    <h4 class="text-center mt-2 text-light border m-auto w-25">TikTok 
-   </h4> <a href="{{route('youtube')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1 ml-auto">Back</a> <hr>
+   </h4> <a href="{{route('social')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1 ml-auto">Back</a> <hr>
    
 
          <div class="row mt-5"> 

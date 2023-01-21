@@ -1,30 +1,31 @@
 @extends('layout') 
 @section('page')
 
+<style type="text/css"> .smalls{color: black;font-size: 13px;} </style>
 
 @php $data = Session::get('instaInfo'); @endphp
 <div class=" mx-auto" style="width:95%; background:#161616;" >  
-   <h4 class="text-center mt-2 text-light w-75">Instagram Report <a href="{{route('youtube')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back</a>
+   <h4 class="text-center mt-2 text-light w-75">Instagram Report <a href="{{route('social')}}" class="float-right text-light rounded-0 mr-2 px-4 btn btn-outline-dark font-weight-bold my-1">Back</a>
    </h4> <hr>
 
 
-    <div class="w-75 m-auto row">          
+    <div class="row bg-light mx-0 py-2" style="width:83%;">          
 
                      <div class="col-sm-3">
                      
 
-                      <button  id="gender" class="font-weight-bold text-light btn btn-outline-success" onclick="gender();"  value="artist"> Audience by Gender</button>  </div> 
+                      <button  id="gender" class="font-weight-bold text-dark btn btn-outline-success smalls" onclick="gender();"  value="artist"> Audience by Gender</button>  </div> 
 
                        <div class="col-sm-3 link">
-                      <button  id="country" class="font-weight-bold text-light btn btn-outline-success" onclick="country();"  value="artist"> Audience by Country</button>  </div> 
+                      <button  id="country" class="font-weight-bold text-dark btn btn-outline-success smalls" onclick="country();"  value="artist"> Audience by Country</button>  </div> 
                       
                                             <div class="col-sm-3 ">
-                      <button  id="city" class="font-weight-bold text-light btn btn-outline-success" onclick="city();"  value="artist"> Audience by City</button>
+                      <button  id="city" class="font-weight-bold text-dark btn btn-outline-success smalls" onclick="city();"  value="artist"> Audience by City</button>
                        </div>
                             
                       
                                             <div class="col-sm-3 ">
-                      <button  id="reach" class="font-weight-bold text-light btn btn-outline-success" onclick="reach();"  value="artist"> Reach</button>  </div>                     
+                      <button  id="reach" class="font-weight-bold text-dark btn btn-outline-success smalls" onclick="reach();"  value="artist"> Reach</button>  </div>                     
                     
              </div>
 
@@ -221,7 +222,7 @@ var chartContainerReach = new CanvasJS.Chart("chartContainerReach", {
   animationEnabled: true,
   theme: "light2",
   title:{
-    text: "Last 14 days Reach for @Realshinski"
+    text: "Last 14 days Reach"
   },
   axisX: {
     valueFormatString: "DD MMM"
@@ -251,15 +252,15 @@ chartContainerReach.render();
 <div class="mt-4 mx-auto" id="chartContainer" style="height: 370px; width: 100%;"></div>
 </div>
 
-<hr><div class=" " id="city_div">
-<div class="mt-4" id="chartContainerCity" style="height: 370px; width: 100%;"></div>
+<div class=" mx-auto" id="city_div">
+<div class="mx-auto mt-4" id="chartContainerCity" style="height: 370px; width: 100%;"></div>
 </div>
 
-<hr><div class=" " id="country_div">
+<div class=" " id="country_div">
 <div class="mt-4" id="chartContainerCountry" style="height: 370px; width: 100%;"></div>
 </div>
 
-<hr><div class="" id="reach_div">
+<div class="" id="reach_div">
 <div class="mt-4" id="chartContainerReach" style="height: 370px; width: 100%;"></div>
 </div>
 
@@ -367,7 +368,23 @@ chartContainerReach.render();
 
 </script>
 
-
+<script type="text/javascript">
+    if (window.location.hash && window.location.hash == '#_=_') {
+        if (window.history && history.pushState) {
+            window.history.pushState("", document.title, window.location.pathname);
+        } else {
+            // Prevent scrolling by storing the page's current scroll offset
+            var scroll = {
+                top: document.body.scrollTop,
+                left: document.body.scrollLeft
+            };
+            window.location.hash = '';
+            // Restore the scroll offset, should be flicker free
+            document.body.scrollTop = scroll.top;
+            document.body.scrollLeft = scroll.left;
+        }
+    }
+</script>
 
           @endsection
         

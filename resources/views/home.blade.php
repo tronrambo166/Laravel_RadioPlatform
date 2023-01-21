@@ -97,7 +97,9 @@ function getSongs() {
            const [title, count] = entry; console.log(title+'=>'+count);
            try{
             Object.entries(songs_all).forEach(entry => {
-           const [key, value] = entry;
+           const [key, value] = entry; //console.log(key+'=>'+value);
+           if(title != value.artist) {
+            
            if( value.title == title && i<21){
             if(value.duration<10) dur=value.duration; else dur=(value.duration/60).toFixed();
             
@@ -110,13 +112,16 @@ function getSongs() {
             move='-'; 
                    
             //New Move
-
-            $('#songs').append('<tr><th scope="row" class="text-center">'+i+'</th> <td>'+value.artist+'</td> <td>'+value.title+' </td> <td> '+move+' </td> </tr>');
+           
+            $('#songs').append('<tr><th scope="row" class="text-center">'+i+'</th> <td>'+value.artist+'</td> <td>'+value.title+' </td> <td> '+move+'</td>  </tr>');
+            
                $('#loading').remove();
+
 
                // if(value.artist=='Otile Brown')  document.getElementById('played').innerHTML=count;           
            //console.log(value.album); 
-           i++; throw BreakException; };
+           i++; throw BreakException; }; }
+
           });  
 
           }

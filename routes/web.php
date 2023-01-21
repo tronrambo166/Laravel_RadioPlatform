@@ -68,6 +68,9 @@ Route::get('social_instagram', 'socialController@gotoInsta')->name('social_insta
 Route::get('twitter', 'socialController@twitter')->name('twitter');
 Route::get('instagram', 'socialController@instagram')->name('instagram');
 //Route::get('tiktok', 'socialController@tiktok')->name('tiktok');
+Route::get('socialIds-{platform}', 'socialController@socialIds')->name('socialIds');
+
+Route::post('social_ids', 'socialController@insert_id')->name('social_ids');
 //Social
 
 
@@ -187,17 +190,11 @@ Route::get('/tiktok_social','socialController@tiktok_social')->name('tiktok_soci
  
 // Clear Config
 
-Route::get('/clear-config', function() {
-    $exitCode = Artisan::call('config:clear');
-    return "config clear";
-
-});
-
-
 Route::get('/clear-cache', function() {
-    $exitCode = Artisan::call('cache:clear');
-    return "config clear";
-
+   \Artisan::call('config:cache');
+    \Artisan::call('view:clear');
+    \Artisan::call('route:clear');
+    dd("Cache is cleared");
 });
 Route::get('social/fb_privacy', function () {return view('fb_privacy');});
  

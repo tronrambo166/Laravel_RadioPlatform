@@ -667,7 +667,7 @@
                     
 
                    @if(Session::has('login_err'))
-                   <div class="alert alert-primary" role="alert">
+                   <div class="alert alert-danger" role="alert">
                                   <p class="">{{Session::get('login_err')}}   @php Session::forget('login_err'); @endphp </p> 
 
                                  </div>  @endif

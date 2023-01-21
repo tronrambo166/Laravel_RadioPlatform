@@ -19,7 +19,7 @@
   </thead>
   <tbody id="songs">
 
-   @foreach($static20 as $static) <?php $cnt=0; ?>
+   @foreach($static20 as $static) <?php $cnt=0; $duplicate =0; ?>
    @foreach($lastDay as $yester)
 
 @if($static->song == $yester->song)  
@@ -30,7 +30,12 @@
 @else <?php $pos='down'; $cnt++; ?>
 @endif
 
-    <tr id="loading">
+@foreach($static20 as $check)
+@if($check->song == $static->artist)
+<?php $duplicate =1; ?>
+ @endif @endforeach
+
+   @if($duplicate==0) <tr id="loading">
      
       <td scope="row" class="text-center"> {{$static->position}} </td>
        <td scope="row" class="text-center"> {{$static->artist}} </td>
@@ -41,7 +46,8 @@
           @else -
           @endif 
         </td>
-    </tr>
+    </tr> @endif
+
 
    @endif
    @endforeach
@@ -85,7 +91,7 @@
                     
               @if(Session::has('login_err'))
                    <div class="alert alert-primary" role="alert">
-                        <p style="font-size: 14px"; class="m-0">{{Session::get('login_err')}}   @php Session::forget('login_err'); @endphp </p>   </div>  
+                        <p style="color: red;font-size: 14px"; class="font-weight-bold m-0">{{Session::get('login_err')}}   @php Session::forget('login_err'); @endphp </p>   </div>  
               @endif
                    
 

@@ -211,6 +211,7 @@ break;
 
 }
 
+
  $cn++; 
 
 } 
@@ -587,7 +588,7 @@ else
      Session::put('login_err','Password wrong!'); return  redirect('/');
 }
 
-  else { Session::put('login_err','user dont exist!'); return  redirect('/');  }
+  else { Session::put('login_err',"user don't exist!"); return  redirect('/');  }
  
  }
  

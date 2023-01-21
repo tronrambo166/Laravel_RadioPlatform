@@ -98,6 +98,9 @@ $stage_name=$user->fname;
 </nav>
 </div>
 
+ @if(Session::has('curl_error')) 
+ <div class="text-center bg-light"><p class="text-danger ml-5">{{Session::get('curl_error')}} @php Session::forget('curl_error'); @endphp </p> </div>
+  @endif
 
     @yield('page')
 
