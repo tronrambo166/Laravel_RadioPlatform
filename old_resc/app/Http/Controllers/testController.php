@@ -284,6 +284,7 @@ if(isset($songs['metadata']['music'][0]['artists'][0]['name'])) $titles['artist'
 
 public function logout() {
    Session::forget('logged');
+   Session::save();
    return redirect('login');
 }
 

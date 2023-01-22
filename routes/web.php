@@ -108,6 +108,8 @@ Route::post('registerB', 'testController@registerB')->name('registerB');
  Route::get('searchArtist', 'userController@searchArtist')->name('searchArtist');
  Route::get('move', 'userController@move')->name('move');
 
+  Route::get('documentation', function(){return view('artist_doc');})->name('documentation');
+
  
 //Forgot Password
 Route::get('forgot/{remail}', 'testController@forgot')->name('forgot');

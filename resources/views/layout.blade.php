@@ -32,13 +32,13 @@ $stage_name=$user->fname;
     
     
        
-  <div class="row pt-2 pb-3" style="background:black;">
+  <div class="row pt-2 pb-0" style="background:black;">
 <nav class=" navbar navbar-expand-md navbar-light py-0 w-100">
   
   <div class="  navbar-collapse" id="navbarNav">
     <ul class="navbar-nav links"> 
       <li class="nav-item text-responsive  text-light  mr-md-5 sm-f30">
-         <a href="{{route('home')}}">
+         <a class="pt-0 pb-2 " href="{{route('home')}}">
         <img style="width:142px; height:55px;" src="images/logo.png">
       </a>
         

@@ -18,6 +18,7 @@
   <style type="text/css">
       .#col-form-label{text-align: left; font-size: 12px; font-family: lato;}
       .#login,#register,#user,#artist,#user_log,#artist_log{ font-family: lato;}
+        .nav-link{font-size: 13px;}
 
   </style>
   
@@ -29,13 +30,13 @@
     
     
        
-  <div class="row  pt-2 pb-3" style="background:black;">
+  <div class="row  pt-2 pb-0" style="background:black;">
 <nav class=" navbar navbar-expand-md navbar-light py-0 w-100">
   
   <div class="  navbar-collapse" id="navbarNav">
     <ul class="navbar-nav links">
       <li class="nav-item text-responsive  text-light  mr-md-5 sm-f30">
-      <a href="{{route('static20')}}">
+      <a class="pt-0 pb-2" href="{{route('static20')}}">
           <h3 class="text-success font-weight-bold"> <img style="width:142px; height:55px;" src="images/logo.png"></h3>
       </a>
       
@@ -52,6 +53,10 @@
 
       <li class="nav-item">
         <a class="{{ Request::is('artists') ? 'text-success' : 'text-light' }} nav-link   font-weight-bold" href="artists">Artists</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="{{ Request::is('documentation') ? 'text-success' : 'text-light' }} nav-link   font-weight-bold" href="documentation">Documentation</a>
       </li>
     
      
